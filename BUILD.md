@@ -29,7 +29,7 @@ nuitka --standalone --windows-console-mode=disable \
 build/main.dist/MultiDownload.exe
 ```
 
-将此 exe 与 `plugin_manifest.json`、`FuncList.json` 打包为 zip 即可通过 KnotHub 插件市场分发。
+将此 exe 与 `com.knotlink.multidownload/plugin_manifest.json`、`com.knotlink.multidownload/FuncList.json` 打包为 zip 即可通过 KnotHub 插件市场分发。
 
 ## 分发结构
 
@@ -39,5 +39,7 @@ MultiDownload.zip
 ├── plugin_manifest.json
 └── FuncList.json
 ```
+
+> JSON 文件位于 `com.knotlink.multidownload/` 目录下，按 appID 组织。
 
 安装后 Core 自动启动 `MultiDownload.exe`，连上 KL 总线即可接收下载请求。

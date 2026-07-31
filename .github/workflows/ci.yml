@@ -64,8 +64,8 @@ jobs:
 
       - name: Package release artifact
         run: |
-          Copy-Item plugin_manifest.json -Destination build/main.dist/
-          Copy-Item FuncList.json -Destination build/main.dist/
+          Copy-Item com.knotlink.multidownload/plugin_manifest.json -Destination build/main.dist/
+          Copy-Item com.knotlink.multidownload/FuncList.json -Destination build/main.dist/
           Compress-Archive -Path build/main.dist/* -DestinationPath MultiDownload.zip
 
       - name: Upload to release
