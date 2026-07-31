@@ -34,7 +34,7 @@ build/main.dist/MultiDownload.exe
 ## 分发结构
 
 ```
-MultiDownload.zip
+com.knotlink.multidownload.zip
 ├── MultiDownload.exe
 ├── plugin_manifest.json
 └── FuncList.json
