@@ -182,6 +182,11 @@ def handle_download(data: str) -> str:
     req = KLKVMap()
     req.deserialize(data)
 
+    cmd     = req.get("cmd", "")
+
+    if cmd == "ping":
+        return "pong"
+
     url     = req.get("url", "")
     dest    = req.get("dest", "")
     req_id  = req.get("reqID", "")
