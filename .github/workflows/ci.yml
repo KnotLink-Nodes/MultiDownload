@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  release:
+    types: [published]
+
+jobs:
+  # ── 测试 ──────────────────────────────────────────────────────
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.11", "3.13"]
+        exclude:
+          # Nuitka 3.14 支持还不稳定，3.13 测过即可
+          - os: ubuntu-latest
+            python-version: "3.13"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -e ".[tls,test]"
+
+      - name: Run tests
+        run: pytest -v
+
+  # ── 构建 (仅 release) ────────────────────────────────────────
+  build:
+    if: github.event_name == 'release'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Nuitka
+        run: pip install nuitka ordered-set zstandard
+
+      - name: Install project deps
+        run: pip install -e ".[tls]"
+
+      - name: Compile with Nuitka
+        run: |
+          python -m nuitka --standalone --windows-console-mode=disable `
+            --include-package=multidownload `
+            --output-dir=build `
+            --output-filename=MultiDownload.exe `
+            --assume-yes-for-downloads `
+            main.py
+
+      - name: Package release artifact
+        run: |
+          Copy-Item plugin_manifest.json -Destination build/main.dist/
+          Copy-Item FuncList.json -Destination build/main.dist/
+          Compress-Archive -Path build/main.dist/* -DestinationPath MultiDownload.zip
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: MultiDownload.zip
