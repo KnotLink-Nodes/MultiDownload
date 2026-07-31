@@ -1,0 +1,9 @@
+{
+  "plugin_name": "MultiDownload",
+  "app_id": "com.knotlink.multidownload",
+  "author": "KnotLink",
+  "version": "1.0.0",
+  "description": "多线程下载器 — IDM 风格异步分块 HTTP 下载，支持 TLS 指纹模拟",
+  "auto_start": "true",
+  "exe_path": "MultiDownload.exe"
+}

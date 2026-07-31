@@ -1,0 +1,80 @@
+{
+  "appName": "MultiDownload",
+  "specVersion": "1.0",
+  "manifestVersion": "1.0.0",
+  "openSocket": {
+    "download": {
+      "appID": "com.knotlink.multidownload",
+      "openSocketID": "download",
+      "description": "发起下载请求，立即返回 OK，进度通过 signal 异步推送",
+      "args": {
+        "cmd": {
+          "type": "static",
+          "value": "start",
+          "description": "固定为 start"
+        },
+        "url": {
+          "type": "input",
+          "defaultVal": "",
+          "description": "下载 URL"
+        },
+        "dest": {
+          "type": "input",
+          "defaultVal": "",
+          "description": "目标文件完整路径"
+        },
+        "reqID": {
+          "type": "input",
+          "defaultVal": "",
+          "description": "请求 ID，由调用方生成，信号中原样带回"
+        },
+        "threads": {
+          "type": "optional",
+          "options": [
+            ["4 线程", "4"],
+            ["8 线程 (默认)", "8"],
+            ["16 线程", "16"],
+            ["32 线程", "32"]
+          ],
+          "description": "下载线程数"
+        }
+      },
+      "returns": [
+        ["OK", "请求已接受，下载已开始"]
+      ]
+    }
+  },
+  "signal": {
+    "progress": {
+      "appID": "com.knotlink.multidownload",
+      "signalID": "progress",
+      "description": "下载进度变更 >5% 时广播",
+      "returns": {
+        "reqID": { "description": "请求 ID" },
+        "percent": { "description": "进度百分比 0-100" },
+        "downloaded": { "description": "已下载字节数" },
+        "total": { "description": "文件总字节数" },
+        "speed": { "description": "当前速度 (bytes/s)" }
+      }
+    },
+    "completed": {
+      "appID": "com.knotlink.multidownload",
+      "signalID": "completed",
+      "description": "下载完成时广播",
+      "returns": {
+        "reqID": { "description": "请求 ID" },
+        "path": { "description": "下载完成的文件路径" },
+        "size": { "description": "文件大小 (bytes)" }
+      }
+    },
+    "failed": {
+      "appID": "com.knotlink.multidownload",
+      "signalID": "failed",
+      "description": "下载失败时广播",
+      "returns": {
+        "reqID": { "description": "请求 ID" },
+        "error": { "description": "错误信息" }
+      }
+    }
+  }
+}
